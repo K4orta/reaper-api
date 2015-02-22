@@ -4,14 +4,16 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
+	"strconv"
 )
 
 type Hero struct {
 	Id         int        `json:"id"`
-	Level      int        `json:"id"`
-	Paragon    int        `json:"id"`
-	Stats      *HeroStats `json:"id"`
-	LastUpdate int64      `json:"id"`
+	Level      int        `json:"level"`
+	Paragon    int        `json:"paragon"`
+	Stats      *HeroStats `json:"stats"`
+	Name       string     `json:"name"`
+	LastUpdate int64      `json:"last-update"`
 }
 
 type HeroStats struct {
@@ -23,6 +25,7 @@ type HeroStats struct {
 	Armor             float32 `json:"armor"`
 	Strength          float32 `json:"strength"`
 	Dexterity         float32 `json:"dexterity"`
+	Vitality          float32 `json:"vitality"`
 	Intelligence      float32 `json:"intelligence"`
 	PhysicalResist    float32 `json:"physicalResist"`
 	FireResist        float32 `json:"fireResist"`
@@ -45,15 +48,16 @@ type HeroStats struct {
 	LifeOnHit         float32 `json:"lifeOnHit"`
 	PrimaryResource   float32 `json:"primaryResource"`
 	SecondaryResource float32 `json:"secondaryResource"`
-	LastUpdate        int64   `json:"lastUpdate"`
+	LastUpdate        int64   `json:"last-update"`
 }
 
 var (
 	heroUrl = "https://us.api.battle.net/d3/profile"
 )
 
-func FetchHero(battleTag string, heroId int) (*Hero, error) {
-	resp, err := http.Get(careerUrl + "/" + battleTag + "/hero/" + string(heroId) + "/?locale=en_US&apikey=")
+func FetchHero(battleTag string, heroId int64) (*Hero, error) {
+	hid := strconv.FormatInt(heroId, 10)
+	resp, err := http.Get(FormatUrl(careerUrl + "/" + battleTag + "/hero/" + hid))
 	if err != nil {
 		return nil, err
 	}
@@ -64,7 +68,6 @@ func FetchHero(battleTag string, heroId int) (*Hero, error) {
 	}
 
 	var hd Hero
-
 	json.Unmarshal([]byte(b), &hd)
 	return &hd, nil
 }

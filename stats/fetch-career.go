@@ -2,6 +2,7 @@ package stats
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 )
@@ -24,7 +25,8 @@ type CharacterSummary struct {
 }
 
 func FetchCareer(battleTag string) (*Profile, error) {
-	resp, err := http.Get(careerUrl + "/" + battleTag + "/?locale=en_US&apikey=")
+	fmt.Println(FormatUrl(careerUrl + "/" + battleTag + "/"))
+	resp, err := http.Get(FormatUrl(careerUrl + "/" + battleTag + "/"))
 	if err != nil {
 		return nil, err
 	}
