@@ -1,18 +1,19 @@
 package main
 
 import (
-	"fmt"
-	"github.com/"
+	"github.com/codegangsta/negroni"
+	"github.com/gorilla/mux"
+	"net/http"
 )
 
-//https://us.api.battle.net/d3/profile/brackets%231829/?locale=en_US&apikey=
 func main() {
-	m := martini.Classic()
+	router := mux.NewRouter()
+	router.HandleFunc("/profile/{battleTag}", api.Profile)
+	n := negroni.New()
+	n.Use(negroni.NewStatic(http.Dir("webapp/public")))
+	n.UseHandler(router)
 
-	m.Get("/", func() string {
-		return "hi"
-	})
+	go tasks.StartScrape()
 
-	fmt.Println("Hello")
-	m.Run()
+	n.Run(":8048")
 }
