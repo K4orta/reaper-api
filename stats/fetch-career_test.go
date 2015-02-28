@@ -23,6 +23,10 @@ func TestParseCareer(t *testing.T) {
 	if len(cd.Heroes) != 2 {
 		t.Error("Failed to unmarshal Heroes")
 	}
+
+	if cd.Heroes[0].Owner != "brackets-1829" {
+		t.Error("Error setting owner")
+	}
 }
 
 func makeFakeServer(resp string) *httptest.Server {

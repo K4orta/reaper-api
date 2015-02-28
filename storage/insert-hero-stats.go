@@ -8,7 +8,8 @@ import (
 )
 
 func serializeStats(session *gocql.Session, hero *stats.Hero, h *stats.HeroStats) error {
-	now := time.Unix(hero.LastUpdate, 0)
+	now := time.Unix(hero.LastUpdated, 0)
+	log.Println("TIME:", hero.LastUpdated)
 	return session.Query(`INSERT INTO hero_stats (hero_id, life, damage, toughness, healing, attack_speed, armor, strength, dexterity, vitality, intelligence, physical_resist, fire_resist, cold_resist, lightning_resist, poison_resist, arcane_resist, crit_damage, block_chance, block_amount_min, block_amount_max, damage_increase, crit_chance, damage_reduction, thorns, life_steal, life_per_kill, gold_find, magic_find, life_on_hit, primary_resource, secondary_resource, last_updated) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
 		hero.Id,
 		h.Life,

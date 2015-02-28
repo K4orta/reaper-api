@@ -20,6 +20,10 @@ func TestFetchHero(t *testing.T) {
 	if hd.Stats.Damage != 222259 {
 		t.Error("Failed to unmarshal Stats")
 	}
+
+	if hd.LastUpdated != 1424627763 {
+		t.Error("Failed to unmashal time")
+	}
 }
 
 func stubHeroData() string {

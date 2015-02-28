@@ -12,16 +12,19 @@ var (
 )
 
 type Profile struct {
-	BattleTag string              `json:"battleTag"`
-	Heroes    []*CharacterSummary `json:"heroes"`
+	BattleTag   string              `json:"battleTag"`
+	Heroes      []*CharacterSummary `json:"heroes"`
+	LastUpdated string              `json:"last-updated"`
 }
 
 type CharacterSummary struct {
-	Name        string
-	Id          int64
-	Class       string
-	Level       int
-	LastUpdated int64 `json:"last-updated"`
+	Name        string `json:"name" cql:"name"`
+	Id          int64  `json:"id" cql:"id"`
+	Class       string `json:"class" cql:"class"`
+	Level       int    `json:"level" cql:"level"`
+	Dead        bool   `json:"dead" cql:"dead"`
+	LastUpdated int64  `json:"last-updated" cql:"last_updated"`
+	Owner       string `json:"owner" cql:"owner"`
 }
 
 func FetchCareer(battleTag string) (*Profile, error) {
@@ -39,5 +42,10 @@ func FetchCareer(battleTag string) (*Profile, error) {
 	var cd Profile
 
 	json.Unmarshal([]byte(b), &cd)
+
+	for _, h := range cd.Heroes {
+		h.Owner = battleTag
+	}
+
 	return &cd, nil
 }
