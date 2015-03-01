@@ -2,23 +2,21 @@ package storage
 
 import (
 	"github.com/k4orta/reaper-api/stats"
-	"github.com/relops/cqlr"
 )
 
 func FetchHeroStats(heroId int64) ([]*stats.HeroStats, error) {
-	s, err := NewSession()
+	s, err := CreateConnection()
 	if err != nil {
 		return nil, err
 	}
 	defer s.Close()
-	row := s.Query(`SELECT * FROM hero_stats WHERE hero_id = ?`, heroId)
-
-	b := cqlr.BindQuery(row)
 	heroStats := []*stats.HeroStats{}
-
+	rows, err := s.Queryx(`SELECT * FROM hero_stats WHERE hero_id = $1;`, heroId)
 	hs := stats.HeroStats{}
-	for b.Scan(&hs) {
+	for rows.Next() {
+		rows.StructScan(&hs)
 		heroStats = append(heroStats, &stats.HeroStats{
+			hs.HeroId,
 			hs.Life,
 			hs.Damage,
 			hs.Toughness,

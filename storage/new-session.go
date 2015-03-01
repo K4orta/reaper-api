@@ -1,16 +1,14 @@
 package storage
 
 import (
-	"github.com/gocql/gocql"
+	"github.com/jmoiron/sqlx"
+	_ "github.com/lib/pq"
 )
 
-func NewSession() (*gocql.Session, error) {
-	c := gocql.NewCluster("localhost")
-	c.Keyspace = "reaper"
-	c.Consistency = gocql.Quorum
-	session, err := c.CreateSession()
+func CreateConnection() (*sqlx.DB, error) {
+	c, err := sqlx.Connect("postgres", "user=ewong dbname=reaper sslmode=disable")
 	if err != nil {
 		return nil, err
 	}
-	return session, nil
+	return c, nil
 }

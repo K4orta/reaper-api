@@ -17,38 +17,39 @@ type Hero struct {
 }
 
 type HeroStats struct {
-	Life              float32 `json:"life" cql:"life"`
-	Damage            float32 `json:"damage" cql:"damage"`
-	Toughness         float32 `json:"toughness" cql:"toughness"`
-	Healing           float32 `json:"healing" cql:"healing"`
-	AttackSpeed       float32 `json:"attackSpeed" cql:"attack_speed"`
-	Armor             float32 `json:"armor" cql:"armor"`
-	Strength          float32 `json:"strength" cql:"strength"`
-	Dexterity         float32 `json:"dexterity" cql:"dexterity"`
-	Vitality          float32 `json:"vitality" cql:"vitality"`
-	Intelligence      float32 `json:"intelligence" cql:"intelligence"`
-	PhysicalResist    float32 `json:"physicalResist" cql:"physical_resist"`
-	FireResist        float32 `json:"fireResist" cql:"fire_resist"`
-	ColdResist        float32 `json:"coldResist" cql:"cold_resist"`
-	LightningResist   float32 `json:"lightningResist" cql:"lightning_resist"`
-	PoisonResist      float32 `json:"poisonResist" cql:"poison_resist"`
-	ArcaneResist      float32 `json:"arcaneResist" cql:"arcane_resist"`
-	CritDamage        float32 `json:"critDamage" cql:"crit_damage"`
-	BlockChance       float32 `json:"blockChance" cql:"block_chance"`
-	BlockAmountMin    float32 `json:"blockAmountMin" cql:"block_amount_min"`
-	BlockAmountMax    float32 `json:"blockAmountMax" cql:"block_amount_max"`
-	DamageIncrease    float32 `json:"damageIncrease" cql:"damage_increase"`
-	CritChance        float32 `json:"critChance" cql:"crit_chance"`
-	DamageReduction   float32 `json:"damageReduction" cql:"damage_reduction"`
-	Thorns            float32 `json:"thorns" cql:"thorns"`
-	LifeSteal         float32 `json:"lifeSteal" cql:"life_steal"`
-	LifePerKill       float32 `json:"lifePerKill" cql:"life_per_kill"`
-	GoldFind          float32 `json:"goldFind" cql:"gold_find"`
-	MagicFind         float32 `json:"magicFind" cql:"magic_find"`
-	LifeOnHit         float32 `json:"lifeOnHit" cql:"life_on_hit"`
-	PrimaryResource   float32 `json:"primaryResource" cql:"primary_resource"`
-	SecondaryResource float32 `json:"secondaryResource" cql:"secondary_resource"`
-	LastUpdated       int64   `json:"last-updated" cql:"last_updated"`
+	HeroId            int64   `json:"heroId" db:"hero_id"`
+	Life              float32 `json:"life" db:"life"`
+	Damage            float32 `json:"damage" db:"damage"`
+	Toughness         float32 `json:"toughness" db:"toughness"`
+	Healing           float32 `json:"healing" db:"healing"`
+	AttackSpeed       float32 `json:"attackSpeed" db:"attack_speed"`
+	Armor             float32 `json:"armor" db:"armor"`
+	Strength          float32 `json:"strength" db:"strength"`
+	Dexterity         float32 `json:"dexterity" db:"dexterity"`
+	Vitality          float32 `json:"vitality" db:"vitality"`
+	Intelligence      float32 `json:"intelligence" db:"intelligence"`
+	PhysicalResist    float32 `json:"physicalResist" db:"physical_resist"`
+	FireResist        float32 `json:"fireResist" db:"fire_resist"`
+	ColdResist        float32 `json:"coldResist" db:"cold_resist"`
+	LightningResist   float32 `json:"lightningResist" db:"lightning_resist"`
+	PoisonResist      float32 `json:"poisonResist" db:"poison_resist"`
+	ArcaneResist      float32 `json:"arcaneResist" db:"arcane_resist"`
+	CritDamage        float32 `json:"critDamage" db:"crit_damage"`
+	BlockChance       float32 `json:"blockChance" db:"block_chance"`
+	BlockAmountMin    float32 `json:"blockAmountMin" db:"block_amount_min"`
+	BlockAmountMax    float32 `json:"blockAmountMax" db:"block_amount_max"`
+	DamageIncrease    float32 `json:"damageIncrease" db:"damage_increase"`
+	CritChance        float32 `json:"critChance" db:"crit_chance"`
+	DamageReduction   float32 `json:"damageReduction" db:"damage_reduction"`
+	Thorns            float32 `json:"thorns" db:"thorns"`
+	LifeSteal         float32 `json:"lifeSteal" db:"life_steal"`
+	LifePerKill       float32 `json:"lifePerKill" db:"life_per_kill"`
+	GoldFind          float32 `json:"goldFind" db:"gold_find"`
+	MagicFind         float32 `json:"magicFind" db:"magic_find"`
+	LifeOnHit         float32 `json:"lifeOnHit" db:"life_on_hit"`
+	PrimaryResource   float32 `json:"primaryResource" db:"primary_resource"`
+	SecondaryResource float32 `json:"secondaryResource" db:"secondary_resource"`
+	LastUpdated       int64   `json:"last-updated" db:"last_updated"`
 }
 
 var (
@@ -69,5 +70,7 @@ func FetchHero(battleTag string, heroId int64) (*Hero, error) {
 
 	var hd Hero
 	json.Unmarshal([]byte(b), &hd)
+	hd.Stats.HeroId = heroId
+
 	return &hd, nil
 }

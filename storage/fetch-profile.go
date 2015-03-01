@@ -1,25 +1,28 @@
 package storage
 
-// CREATE TABLE reaper.heroes(id int, name text, class text, dead boolean, owner text, level int, last_updated timestamp, PRIMARY KEY(id));
-// CREATE TABLE reaper.hero_stats(hero_id int, life float, damage float, toughness float, healing float, attack_speed float, armor float, strength float, dexterity float, vitality float, intelligence float, physical_resist float, fire_resist float, cold_resist float, lightning_resist float, poison_resist float, arcane_resist float, crit_damage float, block_chance float, block_amount_min float, block_amount_max float, damage_increase float, crit_chance float, damage_reduction float, thorns float, life_steal float, life_per_kill float, gold_find float, magic_find float, life_on_hit float, primary_resource float, secondary_resource float, last_updated timestamp, PRIMARY KEY (hero_id, last_updated));
+// create table heroes (id bigint NOT NULL PRIMARY KEY, name text NOT NULL, class text NOT NULL, dead boolean NOT NULL, owner text NOT NULL, level int NOT NULL, last_updated timestamp NOT NULL);
+
+// CREATE TABLE hero_stats(hero_id bigint NOT NULL, life double precision NOT NULL, damage double precision NOT NULL, toughness double precision NOT NULL, healing double precision NOT NULL, attack_speed double precision NOT NULL, armor double precision NOT NULL, strength double precision NOT NULL, dexterity double precision NOT NULL, vitality double precision NOT NULL, intelligence double precision NOT NULL, physical_resist double precision NOT NULL, fire_resist double precision NOT NULL, cold_resist double precision NOT NULL, lightning_resist double precision NOT NULL, poison_resist double precision NOT NULL, arcane_resist double precision NOT NULL, crit_damage double precision NOT NULL, block_chance double precision NOT NULL, block_amount_min double precision NOT NULL, block_amount_max double precision NOT NULL, damage_increase double precision NOT NULL, crit_chance double precision NOT NULL, damage_reduction double precision NOT NULL, thorns double precision NOT NULL, life_steal double precision NOT NULL, life_per_kill double precision NOT NULL, gold_find double precision NOT NULL, magic_find double precision NOT NULL, life_on_hit double precision NOT NULL, primary_resource double precision NOT NULL, secondary_resource double precision NOT NULL, last_updated timestamp NOT NULL);
+
 import (
 	"github.com/k4orta/reaper-api/stats"
-	"github.com/relops/cqlr"
 )
 
 func FetchHeroes(battleTag string) ([]*stats.CharacterSummary, error) {
-	s, err := NewSession()
+	db, err := CreateConnection()
 	if err != nil {
 		return nil, err
 	}
-	defer s.Close()
-	row := s.Query(`SELECT * FROM heroes WHERE owner = ?`, battleTag)
+	defer db.Close()
 	heroes := []*stats.CharacterSummary{}
 	hero := stats.CharacterSummary{}
+	rows, err := db.Queryx(`SELECT * FROM heroes WHERE owner = $1;`, battleTag)
+	if err != nil {
+		return nil, err
+	}
 
-	b := cqlr.BindQuery(row)
-
-	for b.Scan(&hero) {
+	for rows.Next() {
+		rows.StructScan(&hero)
 		heroes = append(heroes, &stats.CharacterSummary{
 			hero.Name,
 			hero.Id,
@@ -30,5 +33,6 @@ func FetchHeroes(battleTag string) ([]*stats.CharacterSummary, error) {
 			hero.Owner,
 		})
 	}
+
 	return heroes, nil
 }

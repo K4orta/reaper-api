@@ -5,7 +5,7 @@ import (
 )
 
 func TestNewSession(t *testing.T) {
-	s, err := NewSession()
+	s, err := CreateConnection()
 	if err != nil {
 		t.Error("Error with creating session: ", err)
 	}

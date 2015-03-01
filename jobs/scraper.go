@@ -40,7 +40,6 @@ func scrape() {
 			if err != nil {
 				log.Fatal("Error inserting Hero: ", err)
 			}
-
 			err = storage.InsertHeroStats(heroData, heroData.Stats)
 			if err != nil {
 				log.Fatal("Error in scape: ", err)

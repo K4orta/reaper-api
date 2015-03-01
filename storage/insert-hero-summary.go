@@ -1,28 +1,31 @@
 package storage
 
 import (
-	"github.com/gocql/gocql"
 	"github.com/k4orta/reaper-api/stats"
-	"github.com/relops/cqlr"
 	"log"
 )
 
-func serializeHeroSummary(session *gocql.Session, hero *stats.CharacterSummary) error {
-	b := cqlr.Bind(`INSERT INTO heroes (id, name, dead, owner, class, level, last_updated) VALUES (?,?,?,?,?,?,?)`, hero)
-	if err := b.Exec(session); err != nil {
-		log.Fatal("Error inserting Hero", err)
-	}
-
-	return nil
-}
-
 func InsertHeroSummary(hero *stats.CharacterSummary) error {
-	s, err := NewSession()
+	c, err := CreateConnection()
 	if err != nil {
 		log.Fatal("Error connecting to DB in InsertHeroSummary", err)
 	}
-	defer s.Close()
-	err = serializeHeroSummary(s, hero)
+
+	defer c.Close()
+	props := []string{
+		"id",
+		"name",
+		"dead",
+		"owner",
+		"class",
+		"level",
+	}
+
+	_, err = c.NamedExec(`UPDATE heroes SET (`+serializeProps("", props)+`,last_updated) = (`+serializeProps(":", props)+`,to_timestamp(:last_updated)) WHERE id=:id;`, hero)
+	_, err = c.NamedExec(`INSERT INTO heroes (`+serializeProps("", props)+`,last_updated) 
+							SELECT `+serializeProps(":", props)+`,to_timestamp(:last_updated)
+							WHERE NOT EXISTS (SELECT 1 FROM heroes WHERE id=:id);`, hero)
+
 	if err != nil {
 		log.Fatal("Error serializing in InsertHeroSummary", err)
 	}

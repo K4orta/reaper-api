@@ -11,6 +11,7 @@ import (
 func ListHeroes(w http.ResponseWriter, req *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	vars := mux.Vars(req)
+
 	hs, err := storage.FetchHeroes(vars["battleTag"])
 
 	if err == nil {

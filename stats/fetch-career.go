@@ -18,13 +18,13 @@ type Profile struct {
 }
 
 type CharacterSummary struct {
-	Name        string `json:"name" cql:"name"`
-	Id          int64  `json:"id" cql:"id"`
-	Class       string `json:"class" cql:"class"`
-	Level       int    `json:"level" cql:"level"`
-	Dead        bool   `json:"dead" cql:"dead"`
-	LastUpdated int64  `json:"last-updated" cql:"last_updated"`
-	Owner       string `json:"owner" cql:"owner"`
+	Name        string `json:"name" db:"name"`
+	Id          int64  `json:"id" db:"id"`
+	Class       string `json:"class" db:"class"`
+	Level       int    `json:"level" db:"level"`
+	Dead        bool   `json:"dead" db:"dead"`
+	LastUpdated int64  `json:"last-updated" db:"last_updated"`
+	Owner       string `json:"owner" db:"owner"`
 }
 
 func FetchCareer(battleTag string) (*Profile, error) {
