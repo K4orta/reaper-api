@@ -8,8 +8,6 @@ import (
 )
 
 func serializeStats(session *sqlx.DB, hero *stats.Hero, h *stats.HeroStats) (sql.Result, error) {
-	log.Println("TIME:", hero.LastUpdated)
-
 	props := []string{
 		"hero_id",
 		"life",

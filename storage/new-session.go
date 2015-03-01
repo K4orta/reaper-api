@@ -3,10 +3,11 @@ package storage
 import (
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
+	"os"
 )
 
 func CreateConnection() (*sqlx.DB, error) {
-	c, err := sqlx.Connect("postgres", "user=ewong dbname=reaper sslmode=disable")
+	c, err := sqlx.Connect("postgres", "user=ewong password="+os.Getenv("PSPASS")+" dbname=reaper sslmode=disable")
 	if err != nil {
 		return nil, err
 	}
