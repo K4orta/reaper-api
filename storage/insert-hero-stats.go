@@ -41,19 +41,20 @@ func serializeStats(session *sqlx.DB, hero *stats.Hero, h *stats.HeroStats) (sql
 		"life_on_hit",
 		"primary_resource",
 		"secondary_resource",
+		"last_updated",
 	}
 
 	h.LastUpdated = hero.LastUpdated
 
-	_, err := session.NamedExec(`UPDATE hero_stats SET (`+serializeProps("", props)+`,last_updated) = (`+serializeProps(":", props)+`,to_timestamp(:last_updated))
-						WHERE hero_id=:hero_id AND last_updated=to_timestamp(:last_updated)`, h)
+	_, err := session.NamedExec(`UPDATE hero_stats SET (`+serializeProps("", props)+`) = (`+serializeProps(":", props)+`)
+						WHERE hero_id=:hero_id AND last_updated=:last_updated`, h)
 	if err != nil {
 		return nil, err
 	}
 
-	return session.NamedExec(`INSERT INTO hero_stats (`+serializeProps("", props)+`,last_updated) 
-						SELECT `+serializeProps(":", props)+`,to_timestamp(:last_updated) 
-						WHERE NOT EXISTS (SELECT 1 FROM hero_stats WHERE hero_id=:hero_id AND last_updated=to_timestamp(:last_updated));`, h)
+	return session.NamedExec(`INSERT INTO hero_stats (`+serializeProps("", props)+`) 
+						SELECT `+serializeProps(":", props)+` 
+						WHERE NOT EXISTS (SELECT 1 FROM hero_stats WHERE hero_id=:hero_id AND last_updated=:last_updated);`, h)
 }
 
 func InsertHeroStats(hero *stats.Hero, data *stats.HeroStats) error {

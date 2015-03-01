@@ -19,11 +19,12 @@ func InsertHeroSummary(hero *stats.CharacterSummary) error {
 		"owner",
 		"class",
 		"level",
+		"last_updated",
 	}
 
-	_, err = c.NamedExec(`UPDATE heroes SET (`+serializeProps("", props)+`,last_updated) = (`+serializeProps(":", props)+`,to_timestamp(:last_updated)) WHERE id=:id;`, hero)
-	_, err = c.NamedExec(`INSERT INTO heroes (`+serializeProps("", props)+`,last_updated) 
-							SELECT `+serializeProps(":", props)+`,to_timestamp(:last_updated)
+	_, err = c.NamedExec(`UPDATE heroes SET (`+serializeProps("", props)+`) = (`+serializeProps(":", props)+`) WHERE id=:id;`, hero)
+	_, err = c.NamedExec(`INSERT INTO heroes (`+serializeProps("", props)+`) 
+							SELECT `+serializeProps(":", props)+`
 							WHERE NOT EXISTS (SELECT 1 FROM heroes WHERE id=:id);`, hero)
 
 	if err != nil {
