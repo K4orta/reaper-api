@@ -42,7 +42,7 @@ func FetchCareer(battleTag string) (*Profile, error) {
 	err = json.Unmarshal([]byte(b), &cd)
 
 	if err != nil {
-		return nil, error
+		return nil, err
 	}
 
 	for _, h := range cd.Heroes {
