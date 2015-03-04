@@ -26,6 +26,16 @@ func TestFetchHero(t *testing.T) {
 	}
 }
 
+func TestFetchHeroError(t *testing.T) {
+	fakeServer := makeFakeServer(`Bad Data`)
+	careerUrl = fakeServer.URL + "/"
+	_, err := FetchHero("brackets-1829", 57645654)
+
+	if err == nil {
+		t.Error("Didn't catch an error")
+	}
+}
+
 func stubHeroData() string {
 	return `{
 		"id": 57645654,

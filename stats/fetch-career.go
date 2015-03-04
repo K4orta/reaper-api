@@ -39,7 +39,11 @@ func FetchCareer(battleTag string) (*Profile, error) {
 
 	var cd Profile
 
-	json.Unmarshal([]byte(b), &cd)
+	err = json.Unmarshal([]byte(b), &cd)
+
+	if err != nil {
+		return nil, error
+	}
 
 	for _, h := range cd.Heroes {
 		h.Owner = battleTag
