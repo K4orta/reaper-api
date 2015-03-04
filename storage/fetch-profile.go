@@ -16,7 +16,7 @@ func FetchHeroes(battleTag string) ([]*stats.CharacterSummary, error) {
 	defer db.Close()
 	heroes := []*stats.CharacterSummary{}
 	hero := stats.CharacterSummary{}
-	rows, err := db.Queryx(`SELECT * FROM heroes WHERE owner = $1;`, battleTag)
+	rows, err := db.Queryx(`SELECT * FROM heroes WHERE owner = $1 ORDER BY last_updated DESC;`, battleTag)
 	if err != nil {
 		return nil, err
 	}

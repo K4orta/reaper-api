@@ -11,7 +11,7 @@ func FetchHeroStats(heroId int64) ([]*stats.HeroStats, error) {
 	}
 	defer s.Close()
 	heroStats := []*stats.HeroStats{}
-	rows, err := s.Queryx(`SELECT * FROM hero_stats WHERE hero_id = $1;`, heroId)
+	rows, err := s.Queryx(`SELECT * FROM hero_stats WHERE hero_id = $1 ORDER BY last_updated ASC;`, heroId)
 	hs := stats.HeroStats{}
 	for rows.Next() {
 		rows.StructScan(&hs)
