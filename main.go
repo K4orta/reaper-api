@@ -5,6 +5,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/k4orta/reaper-api/api"
 	"github.com/k4orta/reaper-api/jobs"
+	"github.com/rs/cors"
 	"net/http"
 )
 
@@ -13,7 +14,12 @@ func main() {
 	router.HandleFunc("/stats/{id}", api.FetchHeroStats)
 	router.HandleFunc("/heroes/{battleTag}", api.ListHeroes)
 
+	c := cors.New(cors.Options{
+		AllowedOrigins: []string{"*"},
+	})
+
 	n := negroni.New()
+	n.Use(c)
 	n.Use(negroni.NewStatic(http.Dir("webapp/public")))
 	n.UseHandler(router)
 
