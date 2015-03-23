@@ -70,7 +70,7 @@ func FetchHero(battleTag string, heroId int64) (*Hero, error) {
 
 	var hd Hero
 	err = json.Unmarshal([]byte(b), &hd)
-	if err != nil {
+	if err != nil || hd.Stats == nil {
 		return nil, err
 	}
 	hd.Stats.HeroId = heroId

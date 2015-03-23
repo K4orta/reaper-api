@@ -11,6 +11,8 @@ import (
 
 func main() {
 	router := mux.NewRouter()
+	router.HandleFunc("/users", api.CreateUser).Methods("POST")
+	router.HandleFunc("/users", api.ListUsers)
 	router.HandleFunc("/stats/{id}", api.FetchHeroStats)
 	router.HandleFunc("/heroes/{battleTag}", api.ListHeroes)
 
