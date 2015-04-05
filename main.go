@@ -15,6 +15,7 @@ func main() {
 	router.HandleFunc("/users", api.ListUsers)
 	router.HandleFunc("/stats/{id}", api.FetchHeroStats)
 	router.HandleFunc("/heroes/{battleTag}", api.ListHeroes)
+	router.HandleFunc("/recent", api.RecentActivity)
 
 	c := cors.New(cors.Options{
 		AllowedOrigins: []string{"*"},
