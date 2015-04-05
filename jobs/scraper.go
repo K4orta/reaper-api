@@ -14,15 +14,6 @@ func StartScrape() {
 	}
 }
 
-// var (
-// 	battleTags = []string{
-// 		"brackets-1829",
-// 		"dubs-1649",
-// 		"obadiah-1183",
-// 		"darkblob32-1791",
-// 	}
-// )
-
 func scrape() {
 	log.Println("Scraping...")
 
