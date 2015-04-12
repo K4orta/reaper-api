@@ -60,6 +60,7 @@ func UpdateUser(user *stats.User) error {
 		log.Fatal(err)
 		return err
 	}
+	defer s.Close()
 
 	_, err = s.NamedExec(`UPDATE users SET (last_updated) = (:last_updated) WHERE battletag=:battletag;`, user)
 
